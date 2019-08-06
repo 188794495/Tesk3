@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.WorksMapper">
+    <resultMap id="BaseResultMap" type="com.pojo.Works">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="works_name" jdbcType="VARCHAR" property="worksName"/>
+        <result column="belong_first" jdbcType="VARCHAR" property="belongFirst"/>
+        <result column="belong_second" jdbcType="VARCHAR" property="belongSecond"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="creat_time" jdbcType="TIMESTAMP" property="creatTime"/>
+        <result column="second_id" jdbcType="BIGINT" property="secondId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="editor" jdbcType="VARCHAR" property="editor"/>
+    </resultMap>
+
+
+
+    <!--查询全表-->
+    <select id="list" resultType="com.pojo.WorksExample" resultMap="BaseResultMap">
+        select * from works
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from works
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+
+    <insert id="insert" parameterType="com.pojo.Works">
+    insert into works (id, works_name, belong_first,
+      belong_second, second_id,status, creat_time,
+      update_time, editor)
+    values (#{id,jdbcType=BIGINT}, #{worksName,jdbcType=VARCHAR}, #{belongFirst,jdbcType=VARCHAR}, 
+      #{belongSecond,jdbcType=VARCHAR}, #{secondId,jdbcType=BIGINT},#{status,jdbcType=INTEGER}, #{creatTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{editor,jdbcType=VARCHAR})
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.pojo.Works">
+        insert into works
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="worksName != null">
+                works_name,
+            </if>
+            <if test="belongFirst != null">
+                belong_first,
+            </if>
+            <if test="belongSecond != null">
+                belong_second,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="creatTime != null">
+                creat_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="editor != null">
+                editor,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="worksName != null">
+                #{worksName,jdbcType=VARCHAR},
+            </if>
+            <if test="belongFirst != null">
+                #{belongFirst,jdbcType=VARCHAR},
+            </if>
+            <if test="belongSecond != null">
+                #{belongSecond,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="creatTime != null">
+                #{creatTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="editor != null">
+                #{editor,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        select * from works
+        <where>
+            <if test="status !=null">
+                status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="worksName != null" >
+                and works_name LIKE '%${worksName}%'
+            </if>
+        </where>
+    </select>
+
+
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.pojo.Works">
+        update works
+        <set>
+            <if test="worksName != null">
+                works_name = #{worksName,jdbcType=VARCHAR},
+            </if>
+            <if test="belongFirst != null">
+                belong_first = #{belongFirst,jdbcType=VARCHAR},
+            </if>
+            <if test="belongSecond != null">
+                belong_second = #{belongSecond,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="creatTime != null">
+                creat_time = #{creatTime,jdbcType=TIMESTAMP},
+            </if>
+
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+
+            <if test="editor != null">
+                editor = #{editor,jdbcType=VARCHAR},
+            </if>
+            <if test="secondId != null">
+                second_id = #{secondId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

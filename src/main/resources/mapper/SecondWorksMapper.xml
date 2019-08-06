@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.SecondWorksMapper">
+    <resultMap id="BaseResultMap" type="com.pojo.SecondWorks">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="works_name" jdbcType="VARCHAR" property="worksName"/>
+        <result column="belong_first" jdbcType="VARCHAR" property="belongFirst"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="first_id" jdbcType="BIGINT"  property="firstId"/>
+        <result column="editor" jdbcType="VARCHAR" property="editor"/>
+
+        <!--&lt;!&ndash;将emps对象映射成一个集合，emps是user类型中的属性，ofType用于指定集合中存放的对象类型&ndash;&gt;-->
+        <!--<collection property="emps" ofType="Emp">-->
+            <!--<id property="id" column="id"></id>-->
+            <!--<result property="user_id" column="user_id"></result>-->
+            <!--<result property="realname" column="realname"></result>-->
+            <!--<result property="email" column="email"></result>-->
+        <!--</collection>-->
+
+    </resultMap>
+
+    <select id="getFirstWorksById" resultMap="BaseResultMap" parameterType="Long">
+        select
+        second_works.works_name,
+        second_works.belong_first,
+        second_works.editoe,
+        frist_works.works_name,
+        from
+        second_works
+        inner join second_works.frist_id=first_works.id
+        where first_works.id=#{id}
+    </select>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, works_name, belong_first, status, create_time, update_time, editor
+  </sql>
+    <select id="selectByExample" parameterType="com.pojo.SecondWorksExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from second_works
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <!--查询全表-->
+    <select id="list" resultType="com.pojo.SecondWorksExample" resultMap="BaseResultMap">
+        select * from second_works
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from second_works
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from second_works
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.pojo.SecondWorksExample">
+        delete from second_works
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.pojo.SecondWorks">
+    insert into second_works (id,works_name,belong_first,first_id,
+      status, create_time, update_time, 
+      editor)
+    values (#{id,jdbcType=BIGINT}, #{worksName,jdbcType=VARCHAR}, #{belongFirst,jdbcType=VARCHAR},#{firstId,jdbcType=BIGINT},
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{editor,jdbcType=VARCHAR})
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.pojo.SecondWorks">
+        insert into second_works
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="worksName != null">
+                works_name,
+            </if>
+            <if test="belongFirst != null">
+                belong_first,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="editor != null">
+                editor,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="worksName != null">
+                #{worksName,jdbcType=VARCHAR},
+            </if>
+            <if test="belongFirst != null">
+                #{belongFirst,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="editor != null">
+                #{editor,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        select * from second_works
+        <where>
+            <if test="status !=null">
+                status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="worksName != null" >
+                and works_name LIKE '%${worksName}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="countByExample" parameterType="com.pojo.SecondWorksExample" resultType="java.lang.Long">
+        select count(*) from second_works
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update second_works
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.worksName != null">
+                works_name = #{record.worksName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.belongFirst != null">
+                belong_first = #{record.belongFirst,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=INTEGER},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.editor != null">
+                editor = #{record.editor,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update second_works
+        set id = #{record.id,jdbcType=BIGINT},
+        works_name = #{record.worksName,jdbcType=VARCHAR},
+        belong_first = #{record.belongFirst,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        editor = #{record.editor,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.pojo.SecondWorks">
+        update second_works
+        <set>
+            <if test="worksName != null">
+                works_name = #{worksName,jdbcType=VARCHAR},
+            </if>
+            <if test="belongFirst != null">
+                belong_first = #{belongFirst,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstId != null">
+                first_id = #{firstID,jdbcType=BIGINT},
+            </if>
+
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+
+            <if test="editor != null">
+                editor = #{editor,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.pojo.SecondWorks">
+    update second_works
+    set works_name = #{worksName,jdbcType=VARCHAR},
+      belong_first = #{belongFirst,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      editor = #{editor,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
